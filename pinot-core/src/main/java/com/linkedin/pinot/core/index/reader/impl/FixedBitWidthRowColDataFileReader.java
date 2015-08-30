@@ -232,7 +232,7 @@ public class FixedBitWidthRowColDataFileReader {
       colSizesInBits[i] = colSize;
       rowSizeInBits += colSize;
     }
-    totalSizeInBytes = Ints.checkedCast(((((long) rowSizeInBits) * rows) + 7) / 8);
+    totalSizeInBytes = (int)(((((long) rowSizeInBits) * rows) + 7) / 8);
 
   }
 

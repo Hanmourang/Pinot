@@ -165,7 +165,7 @@ public class FixedBitSkipListSCMVReader implements SingleColumnMultiValueReader 
   }
 
   private int computeLength(int rowOffSetStart) {
-    int rowOffSetEnd = Ints.checkedCast(customBitSet.nextSetBitAfter(rowOffSetStart));
+    int rowOffSetEnd = (int)(customBitSet.nextSetBitAfter(rowOffSetStart));
     if (rowOffSetEnd < 0) {
       return totalNumValues - rowOffSetStart;
     }
@@ -179,7 +179,7 @@ public class FixedBitSkipListSCMVReader implements SingleColumnMultiValueReader 
       return chunkIdOffset;
     }
     long rowOffSetStart = customBitSet.findNthBitSetAfter(chunkIdOffset, row - chunkId * docsPerChunk);
-    return Ints.checkedCast(rowOffSetStart);
+    return (int)(rowOffSetStart);
   }
 
   @Override
