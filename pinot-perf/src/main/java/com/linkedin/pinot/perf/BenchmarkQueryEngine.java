@@ -14,6 +14,7 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.profile.StackProfiler;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
@@ -27,15 +28,18 @@ import org.openjdk.jmh.runner.options.TimeValue;
  */
 @State(Scope.Benchmark)
 public class BenchmarkQueryEngine {
-  private static String _tableName = "sTest_OFFLINE";
-  private static String _dataDirectory = "/Users/jfim/index_dir";
+  private static final int EXPECTED_NUM_DOCS_SCANNED = 25000000;
+  private static final int EXPECTED_TOTAL_DOCS_COUNT = 25000000;
+  private static final String QUERY = "select count(*) from sTest group by daysSinceEpoch";
+  private static final String TABLE_NAME = "sTest_OFFLINE";
+  private static final String DATA_DIRECTORY = "/Users/jfim/index_dir";
 
   PerfBenchmarkDriver _perfBenchmarkDriver;
 
   @Setup
   public void startPinot() throws Exception {
-    System.out.println("Using table name " + _tableName);
-    System.out.println("Using data directory " + _dataDirectory);
+    System.out.println("Using table name " + TABLE_NAME);
+    System.out.println("Using data directory " + DATA_DIRECTORY);
     System.out.println("Starting pinot");
 
     PerfBenchmarkDriverConf conf = new PerfBenchmarkDriverConf();
@@ -46,13 +50,13 @@ public class BenchmarkQueryEngine {
     conf.setUploadIndexes(false);
     conf.setRunQueries(false);
     conf.setServerInstanceSegmentTarDir(null);
-    conf.setServerInstanceDataDir(_dataDirectory);
+    conf.setServerInstanceDataDir(DATA_DIRECTORY);
     conf.setConfigureResources(false);
     _perfBenchmarkDriver = new PerfBenchmarkDriver(conf);
     _perfBenchmarkDriver.run();
 
     Set<String> tables = new HashSet<String>();
-    File[] segments = new File(_dataDirectory, _tableName).listFiles();
+    File[] segments = new File(DATA_DIRECTORY, TABLE_NAME).listFiles();
     for (File segmentDir : segments) {
       SegmentMetadataImpl segmentMetadata = new SegmentMetadataImpl(segmentDir);
       if (!tables.contains(segmentMetadata.getTableName())) {
@@ -71,8 +75,8 @@ public class BenchmarkQueryEngine {
   @BenchmarkMode({Mode.SampleTime})
   @OutputTimeUnit(TimeUnit.MILLISECONDS)
   public int sendQueryToPinot() throws Exception {
-    JSONObject returnValue = _perfBenchmarkDriver.postQuery("select count(*) from sTest group by daysSinceEpoch");
-    if (returnValue.getInt("numDocsScanned") != 25000000 || returnValue.getInt("totalDocs") != 25000000) {
+    JSONObject returnValue = _perfBenchmarkDriver.postQuery(QUERY);
+    if (returnValue.getInt("numDocsScanned") != EXPECTED_NUM_DOCS_SCANNED || returnValue.getInt("totalDocs") != EXPECTED_TOTAL_DOCS_COUNT) {
       System.out.println("returnValue = " + returnValue);
       throw new RuntimeException("Unexpected number of docs scanned/total docs");
     }
@@ -88,6 +92,7 @@ public class BenchmarkQueryEngine {
         .warmupIterations(10)
         .measurementTime(TimeValue.seconds(6))
         .measurementIterations(10)
+        .addProfiler(StackProfiler.class)
         .build();
 
     new Runner(opt).run();
