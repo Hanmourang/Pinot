@@ -69,7 +69,7 @@ public class KafkaStarterUtils {
 
   public static void stopServer(KafkaServerStartable serverStartable) {
     serverStartable.shutdown();
-    FileUtils.deleteQuietly(new File(serverStartable.serverConfig().logDirs().head()));
+    //FileUtils.deleteQuietly(new File(serverStartable.serverConfig().logDirs().head()));
   }
 
   public static void createTopic(String kafkaTopic, String zkStr) {

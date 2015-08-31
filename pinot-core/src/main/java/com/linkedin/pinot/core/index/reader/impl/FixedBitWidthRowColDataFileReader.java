@@ -171,7 +171,9 @@ public class FixedBitWidthRowColDataFileReader {
     if (isMmap) {
       byteBuffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, totalSizeInBytes);
     } else {
-      byteBuffer = ByteBuffer.allocateDirect(totalSizeInBytes);
+      byte[] rawBytes = new byte[totalSizeInBytes];
+      //byteBuffer = ByteBuffer.allocateDirect(totalSizeInBytes);
+      byteBuffer = ByteBuffer.wrap(rawBytes);
       file.getChannel().read(byteBuffer);
       file.close();
     }
@@ -244,12 +246,13 @@ public class FixedBitWidthRowColDataFileReader {
    * @return
    */
   private long computeBitOffset(int row, int col) {
-    if (row >= rows || col >= cols) {
-      final String message = String.format(
-          "Input (%d,%d) is not with in expected range (%d,%d)", row, col,
-          rows, cols);
-      throw new IndexOutOfBoundsException(message);
-    }
+    
+//    if (row >= rows || col >= cols) {
+//      final String message = String.format(
+//          "Input (%d,%d) is not with in expected range (%d,%d)", row, col,
+//          rows, cols);
+//      throw new IndexOutOfBoundsException(message);
+//    }
     final long offset = ((long) row) * rowSizeInBits + colBitOffSets[col];
     return offset;
   }

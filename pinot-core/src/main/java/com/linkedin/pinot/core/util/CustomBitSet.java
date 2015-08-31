@@ -102,6 +102,12 @@ public final class CustomBitSet {
     b &= ~(1 << (7 - offset));
     buf.put(byteToSet, b);
   }
+  static int bitMasks[] = new int[32];
+  static {
+    for (int bitLength = 1; bitLength < 32; bitLength++) {
+      bitMasks[bitLength] = (1 << bitLength) - 1;
+    }
+  }
 
   /**
    * reads the read between the start (inclusive) and end (exclusive)
@@ -115,8 +121,8 @@ public final class CustomBitSet {
       int bitOffset = (int) (startBitIndex % 8);
       int shiftOffset = 32 - (bitOffset + bitLength);
       int intValue = buf.getInt(bytePosition);
-      int bitMask = (1 << bitLength) - 1;
-      return (intValue >> shiftOffset) & bitMask;
+      //int bitMask = (1 << bitLength) - 1;
+      return (intValue >> shiftOffset) & bitMasks[bitLength];
     } else {
       int bytePosition = (int) (startBitIndex >>> 3);
       int startBitOffset = (int) (startBitIndex & 7);

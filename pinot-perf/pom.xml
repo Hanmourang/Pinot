@@ -50,6 +50,11 @@
 			<groupId>com.linkedin.pinot</groupId>
 			<artifactId>pinot-broker</artifactId>
 		</dependency>
+    <dependency>
+  <groupId>org.xerial.larray</groupId>
+  <artifactId>larray</artifactId>
+  <version>0.2.1</version>
+</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
