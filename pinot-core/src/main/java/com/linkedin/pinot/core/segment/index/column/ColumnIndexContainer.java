@@ -70,62 +70,62 @@ public abstract class ColumnIndexContainer {
   }
 
   private static ColumnIndexContainer loadSorted(String column, File indexDir, ColumnMetadata metadata,
-      ImmutableDictionaryReader dictionary, ReadMode mode) throws IOException {
+      ImmutableDictionaryReader dictionary, ReadMode readMode) throws IOException {
     File fwdIndexFile = new File(indexDir, column + V1Constants.Indexes.SORTED_FWD_IDX_FILE_EXTENTION);
 
     FixedByteWidthRowColDataFileReader indexReader =
         new FixedByteWidthRowColDataFileReader(fwdIndexFile, metadata.getCardinality(), 2, new int[] { 4, 4 },
-            mode == ReadMode.mmap);
+            readMode);
     return new SortedSVColumnIndexContainer(column, metadata, indexReader, dictionary);
   }
 
   private static ColumnIndexContainer loadUnsorted(String column, File indexDir, ColumnMetadata metadata,
-      ImmutableDictionaryReader dictionary, ReadMode mode, boolean loadInverted) throws IOException {
+      ImmutableDictionaryReader dictionary, ReadMode readMode, boolean loadInverted) throws IOException {
     File fwdIndexFile = new File(indexDir, column + V1Constants.Indexes.UN_SORTED_SV_FWD_IDX_FILE_EXTENTION);
     File invertedIndexFile = new File(indexDir, column + V1Constants.Indexes.BITMAP_INVERTED_INDEX_FILE_EXTENSION);
 
     FixedBitCompressedSVForwardIndexReader fwdIndexReader =
         new FixedBitCompressedSVForwardIndexReader(fwdIndexFile, metadata.getTotalDocs(), metadata.getBitsPerElement(),
-            mode == ReadMode.mmap, metadata.hasNulls());
+            readMode, metadata.hasNulls());
 
     BitmapInvertedIndexReader invertedIndex = null;
 
     if (loadInverted) {
       invertedIndex =
-          createAndLoadInvertedIndexFor(column, fwdIndexReader, metadata, invertedIndexFile, mode, indexDir);
+          createAndLoadInvertedIndexFor(column, fwdIndexReader, metadata, invertedIndexFile, readMode, indexDir);
     }
 
     return new UnsortedSVColumnIndexContainer(column, metadata, fwdIndexReader, dictionary, invertedIndex);
   }
 
   private static ColumnIndexContainer loadMultiValue(String column, File indexDir, ColumnMetadata metadata,
-      ImmutableDictionaryReader dictionary, ReadMode mode, boolean loadInverted) throws Exception {
+      ImmutableDictionaryReader dictionary, ReadMode readMode, boolean loadInverted) throws Exception {
     File fwdIndexFile = new File(indexDir, column + V1Constants.Indexes.UN_SORTED_MV_FWD_IDX_FILE_EXTENTION);
     File invertedIndexFile = new File(indexDir, column + V1Constants.Indexes.BITMAP_INVERTED_INDEX_FILE_EXTENSION);
 
     FixedBitSkipListSCMVReader fwdIndexReader =
         new FixedBitSkipListSCMVReader(fwdIndexFile, metadata.getTotalDocs(), metadata.getTotalNumberOfEntries(),
-            metadata.getBitsPerElement(), false, mode == ReadMode.mmap);
+            metadata.getBitsPerElement(), false, readMode);
 
     BitmapInvertedIndexReader invertedIndex = null;
 
     if (loadInverted) {
       invertedIndex =
-          createAndLoadInvertedIndexFor(column, fwdIndexReader, metadata, invertedIndexFile, mode, indexDir);
+          createAndLoadInvertedIndexFor(column, fwdIndexReader, metadata, invertedIndexFile, readMode, indexDir);
     }
 
     return new UnSortedMVColumnIndexContainer(column, metadata, fwdIndexReader, dictionary, invertedIndex);
   }
 
   private static BitmapInvertedIndexReader createAndLoadInvertedIndexFor(String column, DataFileReader fwdIndex,
-      ColumnMetadata metadata, File invertedIndexFile, ReadMode mode, File indexDir) throws IOException {
+      ColumnMetadata metadata, File invertedIndexFile, ReadMode readMode, File indexDir) throws IOException {
 
     File inProgress = new File(column + "_inv.inprogress");
 
     // returning inverted index from file only when marker file does not exist and inverted file exist
     if (!inProgress.exists() && invertedIndexFile.exists()) {
       LOGGER.warn("found inverted index for colummn {}, loading it", column);
-      return new BitmapInvertedIndexReader(invertedIndexFile, metadata.getCardinality(), mode == ReadMode.mmap);
+      return new BitmapInvertedIndexReader(invertedIndexFile, metadata.getCardinality(), readMode);
     }
 
     // creating the marker file
@@ -165,7 +165,7 @@ public abstract class ColumnIndexContainer {
     FileUtils.deleteQuietly(inProgress);
 
     LOGGER.warn("created inverted index for colummn {}, loading it", column);
-    return new BitmapInvertedIndexReader(invertedIndexFile, metadata.getCardinality(), mode == ReadMode.mmap);
+    return new BitmapInvertedIndexReader(invertedIndexFile, metadata.getCardinality(), readMode);
   }
 
   @SuppressWarnings("incomplete-switch")

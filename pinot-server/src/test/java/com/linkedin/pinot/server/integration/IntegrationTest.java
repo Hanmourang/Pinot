@@ -121,7 +121,7 @@ public class IntegrationTest {
       driver.init(config);
       driver.build();
 
-      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(new File(INDEXES_DIR, "segment_" + String.valueOf(i)), driver.getSegmentName()), ReadMode.mmap));
+      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(new File(INDEXES_DIR, "segment_" + String.valueOf(i)), driver.getSegmentName()), ReadMode.MMAP));
 
       System.out.println("built at : " + segmentDir.getAbsolutePath());
     }

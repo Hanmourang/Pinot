@@ -98,7 +98,7 @@ public class QueriesSentinelTest {
     System.out.println("************************** : " + new File(INDEX_DIR, "segment").getAbsolutePath());
     File segmentFile = new File(INDEX_DIR, "segment").listFiles()[0];
     segmentName = segmentFile.getName();
-    final IndexSegment indexSegment = ColumnarSegmentLoader.load(segmentFile, ReadMode.heap);
+    final IndexSegment indexSegment = ColumnarSegmentLoader.load(segmentFile, ReadMode.HEAP);
     instanceDataManager.getTableDataManager("testTable");
     instanceDataManager.getTableDataManager("testTable").addSegment(indexSegment);
 

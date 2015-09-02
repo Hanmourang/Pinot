@@ -63,7 +63,7 @@ public class CrcUtilsTest {
 
     FileUtils.deleteQuietly(INDEX_DIR);
 
-    final com.linkedin.pinot.core.indexsegment.IndexSegment segment = Loaders.IndexSegment.load(new File(makeSegmentAndReturnPath()), ReadMode.mmap);
+    final com.linkedin.pinot.core.indexsegment.IndexSegment segment = Loaders.IndexSegment.load(new File(makeSegmentAndReturnPath()), ReadMode.MMAP);
     final SegmentMetadata m = segment.getSegmentMetadata();
 
     System.out.println(m.getCrc());

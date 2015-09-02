@@ -47,7 +47,7 @@ public class BitmapInvertedIndexTest {
   @Test
   public void test1() throws Exception {
     // load segment in heap mode
-    final IndexSegmentImpl heapSegment = (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR, ReadMode.heap);
+    final IndexSegmentImpl heapSegment = (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR, ReadMode.HEAP);
     // compare the loaded inverted index with the record in avro file
     final DataFileStream<GenericRecord> reader =
         new DataFileStream<GenericRecord>(new FileInputStream(new File(getClass().getClassLoader()
@@ -79,7 +79,7 @@ public class BitmapInvertedIndexTest {
   @Test
   public void test2() throws Exception {
     // load segment in mmap mode
-    final IndexSegmentImpl mmapSegment = (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR, ReadMode.mmap);
+    final IndexSegmentImpl mmapSegment = (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR, ReadMode.MMAP);
     // compare the loaded inverted index with the record in avro file
     final DataFileStream<GenericRecord> reader =
         new DataFileStream<GenericRecord>(new FileInputStream(new File(getClass().getClassLoader()

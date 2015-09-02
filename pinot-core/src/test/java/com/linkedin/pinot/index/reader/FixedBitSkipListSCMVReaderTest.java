@@ -23,6 +23,7 @@ import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.impl.FixedBitSkipListSCMVReader;
 import com.linkedin.pinot.core.index.writer.impl.FixedBitSkipListSCMVWriter;
 
@@ -68,7 +69,7 @@ public class FixedBitSkipListSCMVReaderTest {
       raf.close();
 
       // Test heap mode
-      FixedBitSkipListSCMVReader heapReader = new FixedBitSkipListSCMVReader(f, numDocs, totalNumValues, maxBits, false, false);
+      FixedBitSkipListSCMVReader heapReader = new FixedBitSkipListSCMVReader(f, numDocs, totalNumValues, maxBits, false, ReadMode.HEAP);
       final int[] readValues = new int[maxNumValues];
       for (int i = 0; i < data.length; i++) {
         final int numValues = heapReader.getIntArray(i, readValues);
@@ -82,7 +83,7 @@ public class FixedBitSkipListSCMVReaderTest {
       // Assert.assertEquals(FileReaderTestUtils.getNumOpenFiles(f), 0);
 
       // Test mmap mode
-      FixedBitSkipListSCMVReader mmapReader = new FixedBitSkipListSCMVReader(f, numDocs, totalNumValues, maxBits, false, true);
+      FixedBitSkipListSCMVReader mmapReader = new FixedBitSkipListSCMVReader(f, numDocs, totalNumValues, maxBits, false, ReadMode.MMAP);
       for (int i = 0; i < data.length; i++) {
         final int numValues = mmapReader.getIntArray(i, readValues);
         Assert.assertEquals(numValues, data[i].length);

@@ -24,6 +24,7 @@ import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.impl.FixedByteWidthRowColDataFileReader;
 
 
@@ -47,7 +48,7 @@ public class FixedByteWidthRowColDataFileReaderTest {
     RandomAccessFile raf = new RandomAccessFile(f, "rw");
     System.out.println("file size: " + raf.getChannel().size());
     raf.close();
-    FixedByteWidthRowColDataFileReader heapReader = new FixedByteWidthRowColDataFileReader(f, data.length, 1, new int[] { 4 }, false);
+    FixedByteWidthRowColDataFileReader heapReader = new FixedByteWidthRowColDataFileReader(f, data.length, 1, new int[] { 4 }, ReadMode.HEAP);
     heapReader.open();
     for (int i = 0; i < data.length; i++) {
       Assert.assertEquals(heapReader.getInt(i, 0), data[i]);
@@ -56,7 +57,7 @@ public class FixedByteWidthRowColDataFileReaderTest {
     heapReader.close();
     // Assert.assertEquals(FileReaderTestUtils.getNumOpenFiles(f), 0);
 
-    FixedByteWidthRowColDataFileReader mmapReader = new FixedByteWidthRowColDataFileReader(f, data.length, 1, new int[] { 4 }, true);
+    FixedByteWidthRowColDataFileReader mmapReader = new FixedByteWidthRowColDataFileReader(f, data.length, 1, new int[] { 4 }, ReadMode.MMAP);
     mmapReader.open();
     for (int i = 0; i < data.length; i++) {
       Assert.assertEquals(mmapReader.getInt(i, 0), data[i]);
@@ -92,7 +93,7 @@ public class FixedByteWidthRowColDataFileReaderTest {
     RandomAccessFile raf = new RandomAccessFile(f, "rw");
     System.out.println("file size: " + raf.getChannel().size());
     raf.close();
-    FixedByteWidthRowColDataFileReader heapReader = new FixedByteWidthRowColDataFileReader(f, numRows, numCols, new int[] { 4, 4 }, false);
+    FixedByteWidthRowColDataFileReader heapReader = new FixedByteWidthRowColDataFileReader(f, numRows, numCols, new int[] { 4, 4 }, ReadMode.HEAP);
     heapReader.open();
     for (int i = 0; i < numRows; i++) {
       for (int j = 0; j < numCols; j++) {
@@ -103,7 +104,7 @@ public class FixedByteWidthRowColDataFileReaderTest {
     heapReader.close();
     // Assert.assertEquals(FileReaderTestUtils.getNumOpenFiles(f), 0);
 
-    FixedByteWidthRowColDataFileReader mmapReader = new FixedByteWidthRowColDataFileReader(f, numRows, numCols, new int[] { 4, 4 }, true);
+    FixedByteWidthRowColDataFileReader mmapReader = new FixedByteWidthRowColDataFileReader(f, numRows, numCols, new int[] { 4, 4 }, ReadMode.MMAP);
     mmapReader.open();
     for (int i = 0; i < numRows; i++) {
       for (int j = 0; j < numCols; j++) {

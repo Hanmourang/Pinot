@@ -16,12 +16,14 @@
 package com.linkedin.pinot.core.index.reader.impl;
 
 import com.google.common.primitives.Ints;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.common.utils.MmapUtils;
 import com.linkedin.pinot.core.index.reader.DataFileMetadata;
 import com.linkedin.pinot.core.index.reader.SingleColumnMultiValueReader;
@@ -66,7 +68,7 @@ public class FixedBitSkipListSCMVReader implements SingleColumnMultiValueReader 
   private boolean isMmap;
 
   public FixedBitSkipListSCMVReader(File file, int numDocs, int totalNumValues, int columnSizeInBits, boolean signed,
-      boolean isMmap) throws Exception {
+      ReadMode readMode) throws Exception {
     this.numDocs = numDocs;
     this.totalNumValues = totalNumValues;
     float averageValuesPerDoc = totalNumValues / numDocs;
@@ -77,7 +79,7 @@ public class FixedBitSkipListSCMVReader implements SingleColumnMultiValueReader 
     rawDataSize = (totalNumValues * columnSizeInBits + 7) / 8;
     totalSize = chunkOffsetHeaderSize + bitsetSize + rawDataSize;
     raf = new RandomAccessFile(file, "rw");
-    this.isMmap = isMmap;
+    this.isMmap = (readMode == ReadMode.MMAP);
     if (isMmap) {
       chunkOffsetsBuffer = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, chunkOffsetHeaderSize);
       bitsetBuffer = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, chunkOffsetHeaderSize, bitsetSize);

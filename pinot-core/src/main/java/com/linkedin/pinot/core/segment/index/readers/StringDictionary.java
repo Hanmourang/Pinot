@@ -32,8 +32,8 @@ import com.linkedin.pinot.core.segment.index.ColumnMetadata;
 public class StringDictionary extends ImmutableDictionaryReader {
   private final int lengthofMaxEntry;
 
-  public StringDictionary(File dictFile, ColumnMetadata metadata, ReadMode mode) throws IOException {
-    super(dictFile, metadata.getCardinality(), metadata.getStringColumnMaxLength(), mode == ReadMode.mmap);
+  public StringDictionary(File dictFile, ColumnMetadata metadata, ReadMode readMode) throws IOException {
+    super(dictFile, metadata.getCardinality(), metadata.getStringColumnMaxLength(), readMode);
     lengthofMaxEntry = metadata.getStringColumnMaxLength();
   }
 

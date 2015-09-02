@@ -56,11 +56,11 @@ public class BitmapPerformanceBenchmark {
       int cardinality = columnMetadata.getCardinality();
       cardinalityMap.put(column, cardinality);
       System.out.println(column + "\t\t\t" + cardinality + "  \t" + columnMetadata.getDataType());
-      BitmapInvertedIndexReader bitmapInvertedIndex = new BitmapInvertedIndexReader(file, cardinality, true);
+      BitmapInvertedIndexReader bitmapInvertedIndex = new BitmapInvertedIndexReader(file, cardinality, ReadMode.HEAP);
       File dictionaryFile = new File(explodedIndexSegmentDir + "/" + column + ".dict");
       ColumnIndexContainer container =
           ColumnIndexContainer.init(column, dictionaryFile.getParentFile(),
-              columnMetadata, null, ReadMode.heap);
+              columnMetadata, null, ReadMode.HEAP);
       ImmutableDictionaryReader dictionary = container.getDictionary();
       if (columnMetadata.getDataType() == DataType.INT) {
         System.out.println("BitmapPerformanceBenchmark.main()");

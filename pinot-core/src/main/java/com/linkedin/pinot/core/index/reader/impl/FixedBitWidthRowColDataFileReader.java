@@ -16,6 +16,7 @@
 package com.linkedin.pinot.core.index.reader.impl;
 
 import com.google.common.primitives.Ints;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.common.utils.MmapUtils;
 import com.linkedin.pinot.core.util.CustomBitSet;
 
@@ -75,12 +77,12 @@ public class FixedBitWidthRowColDataFileReader {
    * @return
    * @throws IOException
    */
-  public static FixedBitWidthRowColDataFileReader forHeap(File file, int rows,
-      int cols, int[] columnSizesInBits) throws IOException {
+  public static FixedBitWidthRowColDataFileReader createReader(File file, int rows,
+      int cols, int[] columnSizesInBits, ReadMode readMode) throws IOException {
     boolean[] signed = new boolean[cols];
     Arrays.fill(signed, false);
     return new FixedBitWidthRowColDataFileReader(file, rows, cols,
-        columnSizesInBits, signed, false);
+        columnSizesInBits, signed, readMode);
   }
 
   /**
@@ -93,44 +95,12 @@ public class FixedBitWidthRowColDataFileReader {
    * @return
    * @throws IOException
    */
-  public static FixedBitWidthRowColDataFileReader forHeap(File file, int rows,
-      int cols, int[] columnSizesInBits, boolean[] signed) throws IOException {
+  public static FixedBitWidthRowColDataFileReader createReader(File file, int rows,
+      int cols, int[] columnSizesInBits, boolean[] signed, ReadMode readMode) throws IOException {
     return new FixedBitWidthRowColDataFileReader(file, rows, cols,
-        columnSizesInBits, signed, false);
+        columnSizesInBits, signed, readMode);
   }
 
-  /**
-   *
-   * @param file
-   * @param rows
-   * @param cols
-   * @param columnSizesInBits
-   * @return
-   * @throws IOException
-   */
-  public static FixedBitWidthRowColDataFileReader forMmap(File file, int rows,
-      int cols, int[] columnSizesInBits) throws IOException {
-    boolean[] signed = new boolean[cols];
-    Arrays.fill(signed, false);
-    return new FixedBitWidthRowColDataFileReader(file, rows, cols,
-        columnSizesInBits, signed, true);
-  }
-
-  /**
-   *
-   * @param file
-   * @param rows
-   * @param cols
-   * @param columnSizesInBits
-   * @param signed
-   * @return
-   * @throws IOException
-   */
-  public static FixedBitWidthRowColDataFileReader forMmap(File file, int rows,
-      int cols, int[] columnSizesInBits, boolean[] signed) throws IOException {
-    return new FixedBitWidthRowColDataFileReader(file, rows, cols,
-        columnSizesInBits, signed, true);
-  }
 
   /**
    *
@@ -163,7 +133,7 @@ public class FixedBitWidthRowColDataFileReader {
    * @throws IOException
    */
   private FixedBitWidthRowColDataFileReader(File dataFile, int rows, int cols,
-      int[] columnSizesInBits, boolean[] signed, boolean isMmap)
+      int[] columnSizesInBits, boolean[] signed, ReadMode readMode)
       throws IOException {
     init(rows, cols, columnSizesInBits, signed);
     file = new RandomAccessFile(dataFile, "rw");
@@ -210,8 +180,8 @@ public class FixedBitWidthRowColDataFileReader {
    * @throws IOException
    */
   private FixedBitWidthRowColDataFileReader(String fileName, int rows,
-      int cols, int[] columnSizes, boolean[] signed) throws IOException {
-    this(new File(fileName), rows, cols, columnSizes, signed, true);
+      int cols, int[] columnSizes, boolean[] signed, ReadMode readMode) throws IOException {
+    this(new File(fileName), rows, cols, columnSizes, signed, readMode);
   }
 
   private void init(int rows, int cols, int[] columnSizesInBits,

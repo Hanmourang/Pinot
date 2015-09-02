@@ -116,7 +116,7 @@ public class SelectionQueriesTest {
 
     System.out.println("built at : " + INDEX_DIR.getAbsolutePath());
     final File indexSegmentDir = new File(INDEX_DIR, driver.getSegmentName());
-    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.heap);
+    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.HEAP);
     _medataMap = ((SegmentMetadataImpl) ((IndexSegmentImpl) _indexSegment).getSegmentMetadata()).getColumnMetadataMap();
   }
 
@@ -140,7 +140,7 @@ public class SelectionQueriesTest {
       driver.build();
 
       System.out.println("built at : " + segmentDir.getAbsolutePath());
-      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(segmentDir, driver.getSegmentName()), ReadMode.heap));
+      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(segmentDir, driver.getSegmentName()), ReadMode.HEAP));
     }
   }
 

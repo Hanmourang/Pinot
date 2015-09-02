@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.roaringbitmap.buffer.ImmutableRoaringBitmap;
 import org.roaringbitmap.buffer.MutableRoaringBitmap;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.impl.FixedByteWidthRowColDataFileReader;
 
 
@@ -28,13 +29,9 @@ public class SortedInvertedIndexReader implements InvertedIndexReader {
   private final int cardinality;
   private final FixedByteWidthRowColDataFileReader indexReader;
 
-  public SortedInvertedIndexReader(File file, int cardinality, boolean isMmap) throws IOException {
+  public SortedInvertedIndexReader(File file, int cardinality, ReadMode readMode) throws IOException {
     this.cardinality = cardinality;
-    if (isMmap) {
-      indexReader = FixedByteWidthRowColDataFileReader.forMmap(file, cardinality, 2, new int[] { 4, 4 });
-    } else {
-      indexReader = FixedByteWidthRowColDataFileReader.forHeap(file, cardinality, 2, new int[] { 4, 4 });
-    }
+    this.indexReader = FixedByteWidthRowColDataFileReader.createReader(file, cardinality, 2, new int[] { 4, 4 }, readMode);
   }
 
   public SortedInvertedIndexReader(FixedByteWidthRowColDataFileReader indexReader) {

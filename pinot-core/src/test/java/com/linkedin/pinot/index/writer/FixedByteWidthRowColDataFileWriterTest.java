@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.impl.FixedByteWidthRowColDataFileReader;
 import com.linkedin.pinot.core.index.writer.impl.FixedByteWidthRowColDataFileWriter;
 import com.linkedin.pinot.core.segment.creator.impl.V1Constants;
@@ -114,7 +115,7 @@ public class FixedByteWidthRowColDataFileWriterTest {
       writer.setString(i, 0, data[i]);
     }
     writer.close();
-    FixedByteWidthRowColDataFileReader dataFileReader = FixedByteWidthRowColDataFileReader.forMmap(file, rows, 1, new int[] { stringColumnMaxLength });
+    FixedByteWidthRowColDataFileReader dataFileReader = FixedByteWidthRowColDataFileReader.createReader(file, rows, 1, new int[] { stringColumnMaxLength },ReadMode.HEAP);
     for (int i = 0; i < rows; i++) {
       String stringInFile = dataFileReader.getString(i, 0);
       Assert.assertEquals(stringInFile, data[i]);

@@ -86,9 +86,9 @@ public class IntArraysTest {
   @Test
   public void test1() throws Exception {
     final IndexSegmentImpl heapSegment =
-        (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR.listFiles()[0], ReadMode.heap);
+        (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR.listFiles()[0], ReadMode.HEAP);
     final IndexSegmentImpl mmapSegment =
-        (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) ColumnarSegmentLoader.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
     final Map<String, ColumnMetadata> metadataMap =
         ((SegmentMetadataImpl) heapSegment.getSegmentMetadata()).getColumnMetadataMap();
 

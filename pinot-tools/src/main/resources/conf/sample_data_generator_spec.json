@@ -1,0 +1,44 @@
+[
+   {
+      "column":"ds",
+      "range":false,
+      "cardinality":7
+   },
+   {
+      "column":"id_listing",
+      "range":false,
+      "cardinality":1400000
+   },
+   {
+      "column":"dim_ip_country",
+      "range":false,
+      "cardinality":234
+   },
+   {
+      "column":"dim_ip_state",
+      "range":false,
+      "cardinality":1222
+   },
+   {
+      "column":"dim_ip_region",
+      "range":false,
+      "cardinality":7
+   },
+   {
+      "column":"dim_ip_lat",
+      "range":false,
+      "cardinality":54000
+   },
+   {
+      "column":"dim_ip_lng",
+      "range":false,
+      "cardinality":60000
+   },
+   {
+      "column":"daysSinceEpoch",
+      "range":true,
+      "rangeStart":12345,
+      "rangeEnd":12352
+      
+   }
+]

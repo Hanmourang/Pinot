@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.roaringbitmap.buffer.ImmutableRoaringBitmap;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.common.utils.MmapUtils;
 
 
@@ -52,9 +53,9 @@ public class BitmapInvertedIndexReader implements InvertedIndexReader {
    * the dictionary.
    * @throws IOException
    */
-  public BitmapInvertedIndexReader(File file, int cardinality, boolean isMmap) throws IOException {
+  public BitmapInvertedIndexReader(File file, int cardinality, ReadMode readMode) throws IOException {
     numberOfBitmaps = cardinality;
-    load(file, isMmap);
+    load(file, readMode);
   }
 
   /**
@@ -107,7 +108,7 @@ public class BitmapInvertedIndexReader implements InvertedIndexReader {
     return buffer.getInt(index * INT_SIZE_IN_BYTES);
   }
 
-  private void load(File file, boolean isMmap) throws IOException {
+  private void load(File file, ReadMode readMode) throws IOException {
     final DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
 
     dis.skipBytes(numberOfBitmaps * INT_SIZE_IN_BYTES);
@@ -115,7 +116,7 @@ public class BitmapInvertedIndexReader implements InvertedIndexReader {
     dis.close();
 
     _rndFile = new RandomAccessFile(file, "r");
-    if (isMmap) {
+    if (readMode == ReadMode.MMAP) {
       buffer = _rndFile.getChannel().map(MapMode.READ_ONLY, 0, lastOffset);
     } else {
       buffer = ByteBuffer.allocateDirect(lastOffset);

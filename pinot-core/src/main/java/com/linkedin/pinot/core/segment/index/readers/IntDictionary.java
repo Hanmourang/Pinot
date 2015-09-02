@@ -28,8 +28,8 @@ import com.linkedin.pinot.core.segment.index.ColumnMetadata;
 
 public class IntDictionary extends ImmutableDictionaryReader {
 
-  public IntDictionary(File dictFile, ColumnMetadata metadata, ReadMode mode) throws IOException {
-    super(dictFile, metadata.getCardinality(), Integer.SIZE / 8, mode == ReadMode.mmap);
+  public IntDictionary(File dictFile, ColumnMetadata metadata, ReadMode readMode) throws IOException {
+    super(dictFile, metadata.getCardinality(), Integer.SIZE / 8, readMode);
   }
 
   @Override

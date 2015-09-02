@@ -95,8 +95,12 @@ public class PinotClientRequestServlet extends HttpServlet {
     final String pql = request.getString("pql");
     boolean isTraceEnabled = false;
     try {
-      isTraceEnabled = Boolean.parseBoolean(request.getString("trace"));
+      if(request.has("trace")){
+        isTraceEnabled = Boolean.parseBoolean(request.getString("trace"));
+        LOGGER.info("Trace Enabled:"+ isTraceEnabled);
+      }
     } catch (Exception e) {
+      LOGGER.warn("Invalid trace value:{}", request.getString("trace"), e);
       // ignore
     }
     final long startTime = System.nanoTime();

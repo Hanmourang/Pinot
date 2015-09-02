@@ -15,17 +15,12 @@
  */
 package com.linkedin.pinot.core.indexsegment.columnar;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import com.linkedin.pinot.common.metadata.segment.IndexLoadingConfigMetadata;
 import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.common.segment.SegmentMetadata;
 import com.linkedin.pinot.core.indexsegment.IndexSegment;
-import com.linkedin.pinot.core.indexsegment.generator.SegmentVersion;
-import com.linkedin.pinot.core.segment.creator.impl.V1Constants;
 import com.linkedin.pinot.core.segment.index.loader.Loaders;
 
 
@@ -38,21 +33,18 @@ public class ColumnarSegmentLoader {
     return load(indexDir, mode, null);
   }
 
-  public static IndexSegment load(File indexDir, ReadMode mode, IndexLoadingConfigMetadata indexLoadingConfigMetadata) throws Exception {
-    switch (mode) {
-      case heap:
-        return loadSegment(indexDir, ReadMode.heap, indexLoadingConfigMetadata);
-      case mmap:
-        return loadSegment(indexDir, ReadMode.mmap, indexLoadingConfigMetadata);
-    }
-    return null;
+  public static IndexSegment load(File indexDir, ReadMode mode, IndexLoadingConfigMetadata indexLoadingConfigMetadata)
+      throws Exception {
+    return loadSegment(indexDir, mode, indexLoadingConfigMetadata);
   }
 
-  public static IndexSegment loadSegment(SegmentMetadata segmentMetadata, ReadMode readMode, IndexLoadingConfigMetadata indexLoadingConfigMetadata) throws Exception {
+  public static IndexSegment loadSegment(SegmentMetadata segmentMetadata, ReadMode readMode,
+      IndexLoadingConfigMetadata indexLoadingConfigMetadata) throws Exception {
     return loadSegment(new File(segmentMetadata.getIndexDir()), readMode, indexLoadingConfigMetadata);
   }
 
-  public static IndexSegment loadSegment(File indexDir, ReadMode readMode, IndexLoadingConfigMetadata indexLoadingConfigMetadata) throws Exception {
+  public static IndexSegment loadSegment(File indexDir, ReadMode readMode,
+      IndexLoadingConfigMetadata indexLoadingConfigMetadata) throws Exception {
     return Loaders.IndexSegment.load(indexDir, readMode, indexLoadingConfigMetadata);
   }
 

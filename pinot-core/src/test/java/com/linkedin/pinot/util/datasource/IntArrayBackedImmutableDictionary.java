@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.segment.index.readers.ImmutableDictionaryReader;
 
 
@@ -26,9 +27,9 @@ public class IntArrayBackedImmutableDictionary extends ImmutableDictionaryReader
 
   private final int[] dictionary;
 
-  protected IntArrayBackedImmutableDictionary(File dictFile, int rows, int columnSize, boolean isMmap,
+  protected IntArrayBackedImmutableDictionary(File dictFile, int rows, int columnSize, ReadMode readMode,
       final int[] dictionary) throws IOException {
-    super(dictFile, rows, columnSize, isMmap);
+    super(dictFile, rows, columnSize, readMode);
     this.dictionary = dictionary;
   }
 

@@ -45,7 +45,7 @@ public class FilterOperatorBenchmark {
     String query = args[1];
     for (File indexSegmentDir : segmentDirs) {
 
-      IndexSegmentImpl indexSegmentImpl = (IndexSegmentImpl) Loaders.IndexSegment.load(indexSegmentDir, ReadMode.heap);
+      IndexSegmentImpl indexSegmentImpl = (IndexSegmentImpl) Loaders.IndexSegment.load(indexSegmentDir, ReadMode.HEAP);
       PQLCompiler compiler = new PQLCompiler(new HashMap<String, String[]>());
       JSONObject jsonObject = compiler.compile(query);
       BrokerRequest brokerRequest = RequestConverter.fromJSON(jsonObject);

@@ -18,6 +18,7 @@ package com.linkedin.pinot.core.segment.index.readers;
 import java.io.File;
 import java.io.IOException;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.DataFileMetadata;
 import com.linkedin.pinot.core.index.reader.SingleColumnSingleValueReader;
 import com.linkedin.pinot.core.index.reader.impl.FixedBitWidthRowColDataFileReader;
@@ -33,14 +34,9 @@ public class FixedBitCompressedSVForwardIndexReader implements SingleColumnSingl
   private final FixedBitWidthRowColDataFileReader dataFileReader;
   private final int rows;
 
-  public FixedBitCompressedSVForwardIndexReader(File file, int rows, int columnSize, boolean isMMap, boolean hasNulls) throws IOException {
+  public FixedBitCompressedSVForwardIndexReader(File file, int rows, int columnSize, ReadMode readMode, boolean hasNulls) throws IOException {
     indexFile = file;
-    if (isMMap) {
-      dataFileReader = FixedBitWidthRowColDataFileReader.forMmap(indexFile, rows, 1, new int[] { columnSize }, new boolean[] { hasNulls });
-    } else {
-      dataFileReader = FixedBitWidthRowColDataFileReader.forHeap(indexFile, rows, 1, new int[] { columnSize }, new boolean[] { hasNulls });
-    }
-
+    dataFileReader = FixedBitWidthRowColDataFileReader.createReader(indexFile, rows, 1, new int[] { columnSize }, new boolean[] { hasNulls }, readMode);
     this.rows = rows;
   }
 

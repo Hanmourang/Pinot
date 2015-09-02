@@ -128,7 +128,7 @@ public class AggregationGroupByWithDictionaryAndTrieTreeOperatorTest {
 
     LOGGER.info("built at : {}", INDEX_DIR.getAbsolutePath());
     final File indexSegmentDir = new File(INDEX_DIR, driver.getSegmentName());
-    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.heap);
+    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.HEAP);
     _medataMap = ((SegmentMetadataImpl) ((IndexSegmentImpl) _indexSegment).getSegmentMetadata()).getColumnMetadataMap();
   }
 
@@ -164,7 +164,7 @@ public class AggregationGroupByWithDictionaryAndTrieTreeOperatorTest {
 
       LOGGER.info("built at : {}", segmentDir.getAbsolutePath());
       final File indexSegmentDir = new File(segmentDir, driver.getSegmentName());
-      _indexSegmentList.add(ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.heap));
+      _indexSegmentList.add(ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.HEAP));
     }
   }
 

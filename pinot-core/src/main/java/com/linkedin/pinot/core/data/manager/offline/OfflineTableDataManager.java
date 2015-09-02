@@ -115,7 +115,7 @@ public class OfflineTableDataManager implements TableDataManager {
       _queryExecutorService =
           Executors.newCachedThreadPool(new NamedThreadFactory("parallel-query-executor-" + _tableName));
     }
-    _readMode = ReadMode.valueOf(_tableDataManagerConfig.getReadMode());
+    _readMode = ReadMode.valueOf(_tableDataManagerConfig.getReadMode().toUpperCase());
     _indexLoadingConfigMetadata = _tableDataManagerConfig.getIndexLoadingConfigMetadata();
     LOGGER
         .info("Initialized table : " + _tableName + " with :\n\tData Directory: " + _tableDataDir

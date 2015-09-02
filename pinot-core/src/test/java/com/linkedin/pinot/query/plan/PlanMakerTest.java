@@ -124,7 +124,7 @@ public class PlanMakerTest {
 
     System.out.println("built at : " + INDEX_DIR.getAbsolutePath());
     final File indexSegmentDir = new File(INDEX_DIR, driver.getSegmentName());
-    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.mmap);
+    _indexSegment = ColumnarSegmentLoader.load(indexSegmentDir, ReadMode.MMAP);
   }
 
   private void setupSegmentList(int numberOfSegments) throws Exception {
@@ -147,7 +147,7 @@ public class PlanMakerTest {
       driver.build();
 
       System.out.println("built at : " + segmentDir.getAbsolutePath());
-      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(segmentDir, driver.getSegmentName()), ReadMode.mmap));
+      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(segmentDir, driver.getSegmentName()), ReadMode.MMAP));
     }
   }
 

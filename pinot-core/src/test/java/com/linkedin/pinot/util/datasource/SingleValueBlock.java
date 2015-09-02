@@ -16,6 +16,7 @@
 package com.linkedin.pinot.util.datasource;
 
 import com.linkedin.pinot.common.data.FieldSpec.DataType;
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.common.Block;
 import com.linkedin.pinot.core.common.BlockDocIdSet;
 import com.linkedin.pinot.core.common.BlockDocIdValueSet;
@@ -175,7 +176,7 @@ public class SingleValueBlock implements Block {
       @Override
       public Dictionary getDictionary() {
         try {
-          return new IntArrayBackedImmutableDictionary(null, dictionary.length, 1, true, dictionary);
+          return new IntArrayBackedImmutableDictionary(null, dictionary.length, 1, ReadMode.HEAP, dictionary);
         } catch (Exception e) {
 
         }

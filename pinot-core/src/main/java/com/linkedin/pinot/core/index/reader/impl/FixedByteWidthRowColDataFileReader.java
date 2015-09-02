@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.common.utils.MmapUtils;
 
 
@@ -65,25 +66,10 @@ public class FixedByteWidthRowColDataFileReader implements Closeable {
    * @return
    * @throws IOException
    */
-  public static FixedByteWidthRowColDataFileReader forHeap(File file,
-      int rows, int cols, int[] columnSizes) throws IOException {
+  public static FixedByteWidthRowColDataFileReader createReader(File file,
+      int rows, int cols, int[] columnSizes, ReadMode readMode) throws IOException {
     return new FixedByteWidthRowColDataFileReader(file, rows, cols,
-        columnSizes, false);
-  }
-
-  /**
-   *
-   * @param file
-   * @param rows
-   * @param cols
-   * @param columnSizes
-   * @return
-   * @throws IOException
-   */
-  public static FixedByteWidthRowColDataFileReader forMmap(File file,
-      int rows, int cols, int[] columnSizes) throws IOException {
-    return new FixedByteWidthRowColDataFileReader(file, rows, cols,
-        columnSizes, true);
+        columnSizes, readMode);
   }
 
   /**
@@ -96,11 +82,11 @@ public class FixedByteWidthRowColDataFileReader implements Closeable {
    * @throws IOException
    */
   public FixedByteWidthRowColDataFileReader(File dataFile, int rows,
-      int cols, int[] columnSizes, boolean isMmap) throws IOException {
+      int cols, int[] columnSizes, ReadMode readMode) throws IOException {
     this.rows = rows;
     this.cols = cols;
     this.columnSizes = columnSizes;
-    this.isMMap = isMmap;
+    this.isMMap = (readMode == ReadMode.MMAP);
     colOffSets = new int[columnSizes.length];
     rowSize = 0;
     for (int i = 0; i < columnSizes.length; i++) {
@@ -109,7 +95,7 @@ public class FixedByteWidthRowColDataFileReader implements Closeable {
     }
     file = new RandomAccessFile(dataFile, "rw");
     final long totalSize = rowSize * rows;
-    if (isMmap) {
+    if (isMMap) {
       byteBuffer = file.getChannel()
           .map(FileChannel.MapMode.READ_ONLY, 0, totalSize)
           .order(ByteOrder.BIG_ENDIAN);
@@ -133,11 +119,6 @@ public class FixedByteWidthRowColDataFileReader implements Closeable {
       rowSize += columnSizes[i];
     }
     byteBuffer = buffer;
-  }
-
-  public FixedByteWidthRowColDataFileReader(String fileName, int rows,
-      int cols, int[] columnSizes) throws IOException {
-    this(new File(fileName), rows, cols, columnSizes, true);
   }
 
   /**

@@ -39,9 +39,9 @@ public class TimeRetentionStrategy implements RetentionStrategy {
   public TimeRetentionStrategy(String timeUnit, String timeValue) throws Exception {
     try {
       _retentionDuration = new Duration(TimeUtils.toMillis(timeUnit, timeValue));
-      if (_retentionDuration.getMillis() <= 0) {
-        throw new RuntimeException("No retention value set.");
-      }
+//      if (_retentionDuration.getMillis() <= 0) {
+//        throw new RuntimeException("No retention value set.");
+//      }
     } catch (Exception e) {
       _retentionDuration = null;
       throw e;

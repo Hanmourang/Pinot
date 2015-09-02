@@ -87,7 +87,7 @@ public class ChunkIndexCreationDriverImplTest {
   @Test
   public void test2() throws Exception {
     final IndexSegmentImpl segment =
-        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
 
     final DataSource ds = segment.getDataSource("column1");
     final Block bl = ds.nextBlock();
@@ -101,7 +101,7 @@ public class ChunkIndexCreationDriverImplTest {
   @Test
   public void test3() throws Exception {
     final IndexSegmentImpl segment =
-        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
 
     final DataSource ds = segment.getDataSource("column7");
     final Block bl = ds.nextBlock();
@@ -121,7 +121,7 @@ public class ChunkIndexCreationDriverImplTest {
   @Test(enabled = false)
   public void test4() throws Exception {
     final IndexSegmentImpl segment =
-        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
     final ImmutableDictionaryReader d = segment.getDictionaryFor("column1");
 
     final List<String> rhs = new ArrayList<String>();
@@ -147,7 +147,7 @@ public class ChunkIndexCreationDriverImplTest {
   @Test(enabled = false)
   public void test5() throws Exception {
     final IndexSegmentImpl segment =
-        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
 
     final List<String> rhs = new ArrayList<String>();
     rhs.add("-100");
@@ -172,7 +172,7 @@ public class ChunkIndexCreationDriverImplTest {
   @Test(enabled = false)
   public void test6() throws Exception {
     final IndexSegmentImpl segment =
-        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.mmap);
+        (IndexSegmentImpl) Loaders.IndexSegment.load(INDEX_DIR.listFiles()[0], ReadMode.MMAP);
     final ImmutableDictionaryReader d = segment.getDictionaryFor("column7");
 
     final List<String> rhs = new ArrayList<String>();

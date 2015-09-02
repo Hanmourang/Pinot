@@ -121,7 +121,7 @@ public class DefaultReduceServiceTest {
       driver.build();
       File parent = new File(INDEXES_DIR, "segment_" + String.valueOf(i));
       String segmentName = parent.list()[0];
-      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(parent, segmentName), ReadMode.mmap));
+      _indexSegmentList.add(ColumnarSegmentLoader.load(new File(parent, segmentName), ReadMode.MMAP));
       System.out.println("built at : " + segmentDir.getAbsolutePath());
     }
 

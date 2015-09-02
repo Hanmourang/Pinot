@@ -16,17 +16,30 @@
 package com.linkedin.pinot.common.segment;
 
 public enum ReadMode {
-  heap,
-  mmap;
+  MMAP, //mmaps the data, os manages the paging. 
+  DIRECT_MEMORY, //Direct memory ByteBuffer.allocateDirect
+  HEAP, //allocate byte array and loads data into byte array. Wraps the byteArray into a byteBuffer
+  HEAP_UNCOMPRESSED, //uncompresses the data into its data type on load, for example a fixed bit compressed data will become short/int/long 
+  NATIVE; //uses UNSAFE mode for loading, this will bypass java layer completely and does raw memory access.
 
   public static ReadMode getEnum(String strVal) {
     if (strVal.equalsIgnoreCase("heap")) {
-      return heap;
+      return HEAP;
     }
     if (strVal.equalsIgnoreCase("mmap") || strVal.equalsIgnoreCase("memorymapped")
         || strVal.equalsIgnoreCase("memorymap")) {
-      return mmap;
+      return MMAP;
     }
+    if (strVal.equalsIgnoreCase("direct_memory")) {
+      return DIRECT_MEMORY;
+    }
+    if (strVal.equalsIgnoreCase("heap_uncompressed")) {
+      return HEAP_UNCOMPRESSED;
+    }
+    if (strVal.equalsIgnoreCase("native")) {
+      return NATIVE;
+    }
+
     throw new IllegalArgumentException("Unknown String Value: " + strVal);
   }
 }

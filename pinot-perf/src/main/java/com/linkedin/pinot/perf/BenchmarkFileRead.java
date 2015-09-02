@@ -15,6 +15,7 @@
  */
 package com.linkedin.pinot.perf;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.segment.index.readers.FixedBitCompressedSVForwardIndexReader;
 
 import java.io.File;
@@ -73,9 +74,8 @@ public class BenchmarkFileRead {
       byteBuffer = ByteBuffer.allocate(length);
       raf.getChannel().read(byteBuffer);
       customBitSet = new LArrayCustomBitSet(file);
-      boolean isMMap = true;
       boolean hasNulls = false;
-      reader = new FixedBitCompressedSVForwardIndexReader(file, rows, columnSizeInBits, isMMap, hasNulls);
+      reader = new FixedBitCompressedSVForwardIndexReader(file, rows, columnSizeInBits, ReadMode.HEAP, hasNulls);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

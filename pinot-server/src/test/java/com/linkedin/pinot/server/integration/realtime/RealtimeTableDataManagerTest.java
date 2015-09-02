@@ -116,7 +116,7 @@ public class RealtimeTableDataManagerTest {
     defaultConfig.addProperty(TABLE_DATA_MANAGER_NAME, tableName);
     String dataDir = "/tmp/" + tableName;
     defaultConfig.addProperty(TABLE_DATA_MANAGER_DATA_DIRECTORY, dataDir);
-    defaultConfig.addProperty(READ_MODE, ReadMode.heap.toString());
+    defaultConfig.addProperty(READ_MODE, ReadMode.HEAP.toString());
     defaultConfig.addProperty(TABLE_DATA_MANAGER_NUM_QUERY_EXECUTOR_THREADS, 20);
     TableDataManagerConfig tableDataManagerConfig = new TableDataManagerConfig(defaultConfig);
 

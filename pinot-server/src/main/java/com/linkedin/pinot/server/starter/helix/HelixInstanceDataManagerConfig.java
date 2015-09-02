@@ -86,7 +86,7 @@ public class HelixInstanceDataManagerConfig implements InstanceDataManagerConfig
   }
 
   public ReadMode getReadMode() {
-    return ReadMode.valueOf(_instanceDataManagerConfiguration.getString(READ_MODE));
+    return ReadMode.valueOf(_instanceDataManagerConfiguration.getString(READ_MODE).toUpperCase());
   }
 
   public String toString() {

@@ -80,7 +80,7 @@ public class TableDataManagerConfig {
     if (_instanceDataManagerConfig.getReadMode() != null) {
       defaultConfig.addProperty(READ_MODE, _instanceDataManagerConfig.getReadMode().toString());
     } else {
-      defaultConfig.addProperty(READ_MODE, ReadMode.heap);
+      defaultConfig.addProperty(READ_MODE, ReadMode.DIRECT_MEMORY);
     }
     defaultConfig.addProperty(TABLE_DATA_MANAGER_NUM_QUERY_EXECUTOR_THREADS, 20);
     TableDataManagerConfig tableDataManagerConfig = new TableDataManagerConfig(defaultConfig);

@@ -21,6 +21,7 @@ import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.linkedin.pinot.common.segment.ReadMode;
 import com.linkedin.pinot.core.index.reader.impl.FixedBitWidthRowColDataFileReader;
 import com.linkedin.pinot.core.index.writer.impl.FixedBitWidthRowColDataFileWriter;
 
@@ -52,7 +53,7 @@ public class FixedBitRowColDataWriterReaderTest {
 
       // Test heap mode
       FixedBitWidthRowColDataFileReader heapReader = FixedBitWidthRowColDataFileReader
-          .forHeap(file, rows, cols, columnSizesInBits);
+          .createReader(file, rows, cols, columnSizesInBits, ReadMode.HEAP);
       for (int i = 0; i < rows; i++) {
         Assert.assertEquals(heapReader.getInt(i, 0), data[i]);
       }
@@ -62,7 +63,7 @@ public class FixedBitRowColDataWriterReaderTest {
 
       // Test mmap mode
       FixedBitWidthRowColDataFileReader mmapReader = FixedBitWidthRowColDataFileReader
-          .forMmap(file, rows, cols, columnSizesInBits);
+          .createReader(file, rows, cols, columnSizesInBits, ReadMode.MMAP);
       for (int i = 0; i < rows; i++) {
         Assert.assertEquals(mmapReader.getInt(i, 0), data[i]);
       }
@@ -101,7 +102,7 @@ public class FixedBitRowColDataWriterReaderTest {
 
       // Test heap mode
       FixedBitWidthRowColDataFileReader heapReader = FixedBitWidthRowColDataFileReader
-          .forHeap(file, rows, cols, columnSizesInBits, new boolean[] { true });
+          .createReader(file, rows, cols, columnSizesInBits, new boolean[] { true }, ReadMode.HEAP);
       for (int i = 0; i < rows; i++) {
         Assert.assertEquals(heapReader.getInt(i, 0), data[i]);
       }
@@ -111,7 +112,7 @@ public class FixedBitRowColDataWriterReaderTest {
 
       // Test mmap mode
       FixedBitWidthRowColDataFileReader mmapReader = FixedBitWidthRowColDataFileReader
-          .forMmap(file, rows, cols, columnSizesInBits, new boolean[] { true });
+          .createReader(file, rows, cols, columnSizesInBits, new boolean[] { true }, ReadMode.MMAP);
       for (int i = 0; i < rows; i++) {
         Assert.assertEquals(mmapReader.getInt(i, 0), data[i]);
       }
